@@ -1,3 +1,21 @@
+# FAQ
+### Q: Как подключиться к БД?
+A: Нужно запустить контейнер с БД и указать правильные настройки подключения.
+1. Установить Docker Desktop ([mac](https://docs.docker.com/desktop/install/mac-install/), [windows](https://docs.docker.com/desktop/install/windows-install/), [linux](https://docs.docker.com/desktop/install/linux-install/))
+2. В терминале в корневой папке проекта выполнить комманду=
+```
+> docker compose up -d
+```
+3. В IDE указать следующие параметры подключения к БД:
+   - host/server: **localhost**
+   - port: **15432**
+   - user: **postgrs**
+   - password: **123456**
+   - database: **price-calculator**
+
+### Q: Не выполняются интеграционные тесты, что делать?
+A: Убедитесь, что запущен контейнер с БД и вы можете подключить к БД из любого IDE.
+
 # Домашнее задание
 
 ## Описание сервиса
