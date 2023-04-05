@@ -9,7 +9,7 @@ A: Нужно запустить контейнер с БД и указать п
 3. В IDE указать следующие параметры подключения к БД:
    - host/server: **localhost**
    - port: **15432**
-   - user: **postgrs**
+   - user: **postgres**
    - password: **123456**
    - database: **price-calculator**
 
