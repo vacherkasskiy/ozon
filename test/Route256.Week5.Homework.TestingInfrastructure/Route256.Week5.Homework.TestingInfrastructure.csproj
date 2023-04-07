@@ -7,14 +7,14 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AutoBogus" Version="2.13.1" />
-        <PackageReference Include="Moq" Version="4.15.1" />
-        <PackageReference Include="Bogus" Version="33.0.2" />
+        <PackageReference Include="AutoBogus" Version="2.13.1"/>
+        <PackageReference Include="Moq" Version="4.15.1"/>
+        <PackageReference Include="Bogus" Version="33.0.2"/>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\Route256.Week5.Homework.PriceCalculator.Bll\Route256.Week5.Homework.PriceCalculator.Bll.csproj" />
-      <ProjectReference Include="..\..\src\Route256.Week5.Homework.PriceCalculator.Dal\Route256.Week5.Homework.PriceCalculator.Dal.csproj" />
+        <ProjectReference Include="..\..\src\Route256.Week5.Homework.PriceCalculator.Bll\Route256.Week5.Homework.PriceCalculator.Bll.csproj"/>
+        <ProjectReference Include="..\..\src\Route256.Week5.Homework.PriceCalculator.Dal\Route256.Week5.Homework.PriceCalculator.Dal.csproj"/>
     </ItemGroup>
-    
+
 </Project>

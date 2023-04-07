@@ -6,7 +6,6 @@ using Route256.Week5.Homework.PriceCalculator.Bll.Commands;
 using Route256.Week5.Homework.PriceCalculator.Bll.Exceptions;
 using Route256.Week5.Homework.PriceCalculator.Bll.Models;
 using Route256.Week5.Homework.PriceCalculator.Bll.Queries;
-using Route256.Week5.Homework.PriceCalculator.Dal.Repositories.Interfaces;
 
 namespace Route256.Week5.Homework.PriceCalculator.Api.Controllers.V1;
 
@@ -21,10 +20,10 @@ public class DeliveryPricesController : ControllerBase
     {
         _mediator = mediator;
     }
-    
+
     /// <summary>
-    /// Метод расчета стоимости доставки на основе объема товаров
-    /// или веса товара. Окончательная стоимость принимается как наибольшая
+    ///     Метод расчета стоимости доставки на основе объема товаров
+    ///     или веса товара. Окончательная стоимость принимается как наибольшая
     /// </summary>
     /// <returns></returns>
     [HttpPost("calculate")]
@@ -42,15 +41,15 @@ public class DeliveryPricesController : ControllerBase
                     x.Weight))
                 .ToArray());
         var result = await _mediator.Send(command, ct);
-        
+
         return new CalculateResponse(
             result.CalculationId,
             result.Price);
     }
-    
-    
+
+
     /// <summary>
-    /// Метод получения истории вычисления
+    ///     Метод получения истории вычисления
     /// </summary>
     /// <returns></returns>
     [HttpPost("get-history")]

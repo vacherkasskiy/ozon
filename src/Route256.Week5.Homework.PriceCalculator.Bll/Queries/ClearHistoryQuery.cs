@@ -7,7 +7,7 @@ namespace Route256.Week5.Homework.PriceCalculator.Bll.Queries;
 
 public record ClearHistoryQuery(
         long UserId,
-        long[] CalculationIds) 
+        long[] CalculationIds)
     : IRequest<ClearHistoryQueryResult>;
 
 public class ClearHistoryQueryHandler
@@ -20,23 +20,19 @@ public class ClearHistoryQueryHandler
     {
         _calculationService = calculationService;
     }
-    
+
     public async Task<ClearHistoryQueryResult> Handle(
-        ClearHistoryQuery request, 
+        ClearHistoryQuery request,
         CancellationToken cancellationToken)
     {
         var userIds = await _calculationService.GetUserIds(request.CalculationIds, cancellationToken);
         var enumerable = userIds.ToArray();
 
         if (enumerable.ToList().Any(x => x != request.UserId))
-        {
             throw new OneOrManyCalculationsBelongsToAnotherUserException();
-        }
 
         if (request.CalculationIds.Length != enumerable.ToList().Count())
-        {
             throw new OneOrManyCalculationsNotFoundException();
-        }
 
         if (request.CalculationIds.Length == 0)
         {

@@ -6,42 +6,41 @@ using Microsoft.Extensions.Hosting;
 using Route256.Week5.Homework.PriceCalculator.Dal.Extensions;
 using Route256.Week5.Homework.PriceCalculator.Dal.Repositories.Interfaces;
 
-namespace Route256.Week5.Homework.PriceCalculator.IntegrationTests.Fixtures
+namespace Route256.Week5.Homework.PriceCalculator.IntegrationTests.Fixtures;
+
+public class TestFixture
 {
-    public class TestFixture
+    public TestFixture()
     {
-        public ICalculationRepository CalculationRepository { get; }
+        var config = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json")
+            .Build();
 
-        public IGoodsRepository GoodsRepository { get; }
+        var host = Host.CreateDefaultBuilder()
+            .ConfigureServices(services =>
+            {
+                services.AddDalInfrastructure(config)
+                    .AddDalRepositories();
+            })
+            .Build();
 
-        public TestFixture()
-        {
-            var config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
-                .Build();
+        ClearDatabase(host);
+        host.MigrateUp();
 
-            var host = Host.CreateDefaultBuilder()
-                .ConfigureServices(services =>
-                {
-                    services.AddDalInfrastructure(config)
-                        .AddDalRepositories();
-                })
-                .Build();
-            
-            ClearDatabase(host);
-            host.MigrateUp();
+        var serviceProvider = host.Services;
+        CalculationRepository = serviceProvider.GetRequiredService<ICalculationRepository>();
+        GoodsRepository = serviceProvider.GetRequiredService<IGoodsRepository>();
+    }
 
-            var serviceProvider = host.Services;
-            CalculationRepository = serviceProvider.GetRequiredService<ICalculationRepository>();
-            GoodsRepository = serviceProvider.GetRequiredService<IGoodsRepository>();
-        }
+    public ICalculationRepository CalculationRepository { get; }
 
-        private static void ClearDatabase(IHost host)
-        {
-            using var scope = host.Services.CreateScope();
-            var runner = scope.ServiceProvider.GetRequiredService<IMigrationRunner>();
-            runner.MigrateDown(20230301);
-        }
+    public IGoodsRepository GoodsRepository { get; }
+
+    private static void ClearDatabase(IHost host)
+    {
+        using var scope = host.Services.CreateScope();
+        var runner = scope.ServiceProvider.GetRequiredService<IMigrationRunner>();
+        runner.MigrateDown(20230301);
     }
 }

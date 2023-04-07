@@ -53,5 +53,4 @@ public class GetCalculationHistoryQueryHandlerTests
         result.Items.Select(x => x.Weight)
             .Should().IntersectWith(queryModels.Select(x => x.TotalWeight));
     }
-
 }

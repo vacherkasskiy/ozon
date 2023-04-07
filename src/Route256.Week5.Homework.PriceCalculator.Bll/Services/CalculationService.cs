@@ -21,7 +21,7 @@ public class CalculationService : ICalculationService
         _calculationRepository = calculationRepository;
         _goodsRepository = goodsRepository;
     }
-    
+
     public async Task<long> SaveCalculation(
         SaveCalculationModel data,
         CancellationToken cancellationToken)
@@ -36,7 +36,7 @@ public class CalculationService : ICalculationService
                 Width = x.Width
             })
             .ToArray();
-        
+
         var calculation = new CalculationEntityV1
         {
             UserId = data.UserId,
@@ -45,7 +45,7 @@ public class CalculationService : ICalculationService
             Price = data.Price,
             At = DateTimeOffset.UtcNow
         };
-        
+
         using var transaction = _calculationRepository.CreateTransactionScope();
         var goodIds = await _goodsRepository.Add(goods, cancellationToken);
 
@@ -55,7 +55,7 @@ public class CalculationService : ICalculationService
 
         return calculationIds.Single();
     }
-    
+
     public decimal CalculatePriceByVolume(
         GoodModel[] goods,
         out double volume)
@@ -63,9 +63,9 @@ public class CalculationService : ICalculationService
         volume = goods
             .Sum(x => x.Length * x.Width * x.Height);
 
-        return (decimal)volume * VolumeToPriceRatio;
+        return (decimal) volume * VolumeToPriceRatio;
     }
-    
+
     public decimal CalculatePriceByWeight(
         GoodModel[] goods,
         out double weight)
@@ -73,7 +73,7 @@ public class CalculationService : ICalculationService
         weight = goods
             .Sum(x => x.Weight);
 
-        return (decimal)weight * WeightToPriceRatio;
+        return (decimal) weight * WeightToPriceRatio;
     }
 
     public async Task<QueryCalculationModel[]> QueryCalculations(
@@ -103,14 +103,14 @@ public class CalculationService : ICalculationService
     {
         return await _calculationRepository.GetUserIds(calculationIds, token);
     }
-    
+
     public async Task<long> DeleteWithIds(
         long[] calculationIds,
         CancellationToken token)
     {
         return await _calculationRepository.DeleteWithIds(calculationIds, token);
     }
-    
+
     public async Task<long> DeleteAllWithUserId(
         long userId,
         CancellationToken token)

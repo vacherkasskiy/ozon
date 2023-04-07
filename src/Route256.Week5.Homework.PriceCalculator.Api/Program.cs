@@ -8,18 +8,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 var services = builder.Services;
 services.AddControllers()
-    .AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions.PropertyNamingPolicy = new SnakeCaseNamingPolicy();
-    });
+    .AddJsonOptions(options => { options.JsonSerializerOptions.PropertyNamingPolicy = new SnakeCaseNamingPolicy(); });
 
 services.AddEndpointsApiExplorer();
 
 // add swagger
-services.AddSwaggerGen(o =>
-{
-    o.CustomSchemaIds(x => x.FullName);
-});
+services.AddSwaggerGen(o => { o.CustomSchemaIds(x => x.FullName); });
 
 //add validation
 services.AddFluentValidation(conf =>
