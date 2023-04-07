@@ -96,6 +96,25 @@ public class CalculationService : ICalculationService
                 x.GoodIds))
             .ToArray();
     }
+
+    public async Task<long[]> GetUserIds(
+        long[] calculationIds,
+        CancellationToken token)
+    {
+        return await _calculationRepository.GetUserIds(calculationIds, token);
+    }
     
+    public async Task<long> DeleteWithIds(
+        long[] calculationIds,
+        CancellationToken token)
+    {
+        return await _calculationRepository.DeleteWithIds(calculationIds, token);
+    }
     
+    public async Task<long> DeleteAllWithUserId(
+        long userId,
+        CancellationToken token)
+    {
+        return await _calculationRepository.DeleteAllWithUserId(userId, token);
+    }
 }

@@ -13,15 +13,15 @@ public interface ICalculationRepository : IDbRepository
         CalculationHistoryQueryModel query,
         CancellationToken token);
 
-    Task<IEnumerable<int>> GetUserIds(
-        int[] calculationIds,
+    Task<long[]> GetUserIds(
+        long[] calculationIds,
         CancellationToken token);
     
-    void DeleteWithIds(
-        int[] calculationIds,
+    Task<long> DeleteWithIds(
+        long[] calculationIds,
         CancellationToken token);
 
-    void DeleteAllWithUserId(
-        int userId,
+    Task<long> DeleteAllWithUserId(
+        long userId,
         CancellationToken token);
 }

@@ -77,8 +77,8 @@ select id
             .ToArray();
     }
 
-    public async Task<IEnumerable<int>> GetUserIds(
-        int[] calculationIds,
+    public async Task<long[]> GetUserIds(
+        long[] calculationIds,
         CancellationToken token)
     {
         const string sqlQuery = @"
@@ -91,23 +91,24 @@ where id = any(@CalculationIds)
         };
         
         await using var connection = await GetAndOpenConnection();
-        var userIds = await connection.QueryAsync<int>(
+        var userIds = await connection.QueryAsync<long>(
             new CommandDefinition(
                 sqlQuery,
                 sqlQueryParams,
                 cancellationToken: token));
         
         
-        return userIds;
+        return userIds.ToArray();
     }
 
-    public async void DeleteWithIds(
-        int[] calculationIds,
+    public async Task<long> DeleteWithIds(
+        long[] calculationIds,
         CancellationToken token)
     {
         const string sqlQuery = @"
 delete from calculations
 where id = any(@CalculationIds)
+returning id
 ";
         var sqlQueryParams = new
         {
@@ -115,20 +116,23 @@ where id = any(@CalculationIds)
         };
         
         await using var connection = await GetAndOpenConnection();
-        await connection.QueryAsync(
+        var ids = await connection.QueryAsync<long>(
             new CommandDefinition(
                 sqlQuery,
                 sqlQueryParams,
                 cancellationToken: token));
+        
+        return ids.ToArray().Length;
     }
 
-    public async void DeleteAllWithUserId(
-        int userId,
+    public async Task<long> DeleteAllWithUserId(
+        long userId,
         CancellationToken token)
     {
         const string sqlQuery = @"
 delete from calculations
 where user_id = @UserId
+returning id
 ";
         var sqlQueryParams = new
         {
@@ -136,10 +140,12 @@ where user_id = @UserId
         };
         
         await using var connection = await GetAndOpenConnection();
-        await connection.QueryAsync(
+        var ids = await connection.QueryAsync<long>(
             new CommandDefinition(
                 sqlQuery,
                 sqlQueryParams,
                 cancellationToken: token));
+
+        return ids.ToArray().Length;
     }
 }

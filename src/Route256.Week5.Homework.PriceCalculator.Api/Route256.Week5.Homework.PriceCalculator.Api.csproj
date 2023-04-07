@@ -25,7 +25,6 @@
   <ItemGroup>
     <Folder Include="Extensions" />
     <Folder Include="NamingPolicies" />
-    <Folder Include="Responses\V1" />
   </ItemGroup>
 
 </Project>

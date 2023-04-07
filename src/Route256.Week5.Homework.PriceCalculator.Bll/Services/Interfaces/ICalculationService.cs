@@ -19,4 +19,16 @@ public interface ICalculationService
     Task<QueryCalculationModel[]> QueryCalculations(
         QueryCalculationFilter query,
         CancellationToken token);
+
+    Task<long[]> GetUserIds(
+        long[] calculationIds,
+        CancellationToken token);
+
+    Task<long> DeleteWithIds(
+        long[] calculationIds,
+        CancellationToken token);
+
+    Task<long> DeleteAllWithUserId(
+        long userId,
+        CancellationToken token);
 }
