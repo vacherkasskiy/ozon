@@ -77,7 +77,7 @@ public class DeliveryPricesController : ControllerBase
     [ProducesResponseType(200)]
     [ProducesResponseType(400)]
     [ProducesResponseType(403)]
-    public async Task<ClearHistoryResponse> ClearHistory(
+    public async Task<IActionResult> ClearHistory(
         ClearHistoryRequest request,
         CancellationToken ct)
     {
@@ -87,17 +87,15 @@ public class DeliveryPricesController : ControllerBase
         try
         {
             var result = await _mediator.Send(query, ct);
-            return new ClearHistoryResponse(result.DeletedRowsAmount);
+            return StatusCode(200);
         }
         catch (OneOrManyCalculationsNotFoundException ex)
         {
-            // что мне здесь писать? о_0
-            return new ClearHistoryResponse(0);
+            return StatusCode(400);
         }
         catch (OneOrManyCalculationsBelongsToAnotherUserException ex)
         {
-            // что мне здесь писать? о_0
-            return new ClearHistoryResponse(0);
+            return StatusCode(403);
         }
     }
 }
