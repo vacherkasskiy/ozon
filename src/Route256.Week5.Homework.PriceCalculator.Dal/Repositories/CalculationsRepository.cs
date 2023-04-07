@@ -76,4 +76,70 @@ select id
         return calculations
             .ToArray();
     }
+
+    public async Task<IEnumerable<int>> GetUserIds(
+        int[] calculationIds,
+        CancellationToken token)
+    {
+        const string sqlQuery = @"
+select user_id from calculations
+where id = any(@CalculationIds)
+";
+        var sqlQueryParams = new
+        {
+            CalculationIds = calculationIds
+        };
+        
+        await using var connection = await GetAndOpenConnection();
+        var userIds = await connection.QueryAsync<int>(
+            new CommandDefinition(
+                sqlQuery,
+                sqlQueryParams,
+                cancellationToken: token));
+        
+        
+        return userIds;
+    }
+
+    public async void DeleteWithIds(
+        int[] calculationIds,
+        CancellationToken token)
+    {
+        const string sqlQuery = @"
+delete from calculations
+where id = any(@CalculationIds)
+";
+        var sqlQueryParams = new
+        {
+            CalculationIds = calculationIds
+        };
+        
+        await using var connection = await GetAndOpenConnection();
+        await connection.QueryAsync(
+            new CommandDefinition(
+                sqlQuery,
+                sqlQueryParams,
+                cancellationToken: token));
+    }
+
+    public async void DeleteAllWithUserId(
+        int userId,
+        CancellationToken token)
+    {
+        const string sqlQuery = @"
+delete from calculations
+where user_id = @UserId
+";
+        var sqlQueryParams = new
+        {
+            UserId = userId
+        };
+        
+        await using var connection = await GetAndOpenConnection();
+        await connection.QueryAsync(
+            new CommandDefinition(
+                sqlQuery,
+                sqlQueryParams,
+                cancellationToken: token));
+    }
 }
