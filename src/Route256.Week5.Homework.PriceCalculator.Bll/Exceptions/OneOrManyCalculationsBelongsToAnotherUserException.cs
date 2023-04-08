@@ -2,11 +2,4 @@
 
 public class OneOrManyCalculationsBelongsToAnotherUserException : Exception
 {
-    public OneOrManyCalculationsBelongsToAnotherUserException()
-    {
-    }
-
-    public OneOrManyCalculationsBelongsToAnotherUserException(string? message) : base(message)
-    {
-    }
 }

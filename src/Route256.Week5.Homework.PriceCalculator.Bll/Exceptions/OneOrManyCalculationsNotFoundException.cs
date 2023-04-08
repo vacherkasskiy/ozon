@@ -2,11 +2,4 @@
 
 public class OneOrManyCalculationsNotFoundException : Exception
 {
-    public OneOrManyCalculationsNotFoundException()
-    {
-    }
-
-    public OneOrManyCalculationsNotFoundException(string? message) : base(message)
-    {
-    }
 }
