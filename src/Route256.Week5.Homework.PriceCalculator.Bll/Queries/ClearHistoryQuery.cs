@@ -8,10 +8,10 @@ namespace Route256.Week5.Homework.PriceCalculator.Bll.Queries;
 public record ClearHistoryQuery(
         long UserId,
         long[] CalculationIds)
-    : IRequest<ClearHistoryQueryResult>;
+    : IRequest<Unit>;
 
 public class ClearHistoryQueryHandler
-    : IRequestHandler<ClearHistoryQuery, ClearHistoryQueryResult>
+    : IRequestHandler<ClearHistoryQuery, Unit>
 {
     private readonly ICalculationService _calculationService;
 
@@ -21,7 +21,7 @@ public class ClearHistoryQueryHandler
         _calculationService = calculationService;
     }
 
-    public async Task<ClearHistoryQueryResult> Handle(
+    public async Task<Unit> Handle(
         ClearHistoryQuery request,
         CancellationToken cancellationToken)
     {
@@ -36,13 +36,13 @@ public class ClearHistoryQueryHandler
 
         if (request.CalculationIds.Length == 0)
         {
-            var deletedRowsAmount = await _calculationService.DeleteAllWithUserId(request.UserId, cancellationToken);
-            return new ClearHistoryQueryResult(deletedRowsAmount);
+            _calculationService.DeleteAllWithUserId(request.UserId, cancellationToken);
+            return new Unit();
         }
         else
         {
-            var deletedRowsAmount = await _calculationService.DeleteWithIds(request.CalculationIds, cancellationToken);
-            return new ClearHistoryQueryResult(deletedRowsAmount);
+            _calculationService.DeleteWithIds(request.CalculationIds, cancellationToken);
+            return new Unit();
         }
     }
 }

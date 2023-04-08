@@ -17,11 +17,11 @@ public interface ICalculationRepository : IDbRepository
         long[] calculationIds,
         CancellationToken token);
 
-    Task<long> DeleteWithIds(
+    void DeleteWithIds(
         long[] calculationIds,
         CancellationToken token);
 
-    Task<long> DeleteAllWithUserId(
+    void DeleteAllWithUserId(
         long userId,
         CancellationToken token);
 }

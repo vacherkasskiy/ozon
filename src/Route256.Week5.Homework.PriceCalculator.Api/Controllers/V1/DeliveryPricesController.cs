@@ -86,7 +86,7 @@ public class DeliveryPricesController : ControllerBase
             request.CalculationIds);
         try
         {
-            var result = await _mediator.Send(query, ct);
+            await _mediator.Send(query, ct);
             return StatusCode(200);
         }
         catch (OneOrManyCalculationsNotFoundException ex)

@@ -104,17 +104,17 @@ public class CalculationService : ICalculationService
         return await _calculationRepository.GetUserIds(calculationIds, token);
     }
 
-    public async Task<long> DeleteWithIds(
+    public async void DeleteWithIds(
         long[] calculationIds,
         CancellationToken token)
     {
-        return await _calculationRepository.DeleteWithIds(calculationIds, token);
+        _calculationRepository.DeleteWithIds(calculationIds, token);
     }
 
-    public async Task<long> DeleteAllWithUserId(
+    public async void DeleteAllWithUserId(
         long userId,
         CancellationToken token)
     {
-        return await _calculationRepository.DeleteAllWithUserId(userId, token);
+        _calculationRepository.DeleteAllWithUserId(userId, token);
     }
 }

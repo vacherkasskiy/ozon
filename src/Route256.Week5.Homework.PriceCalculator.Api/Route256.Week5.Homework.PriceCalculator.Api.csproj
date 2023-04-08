@@ -7,13 +7,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.6"/>
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3"/>
+        <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.6" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Route256.Week5.Homework.PriceCalculator.Bll\Route256.Week5.Homework.PriceCalculator.Bll.csproj"/>
-        <ProjectReference Include="..\Route256.Week5.Homework.PriceCalculator.Dal\Route256.Week5.Homework.PriceCalculator.Dal.csproj"/>
+        <ProjectReference Include="..\Route256.Week5.Homework.PriceCalculator.Bll\Route256.Week5.Homework.PriceCalculator.Bll.csproj" />
+        <ProjectReference Include="..\Route256.Week5.Homework.PriceCalculator.Dal\Route256.Week5.Homework.PriceCalculator.Dal.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -23,8 +23,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Extensions"/>
-        <Folder Include="NamingPolicies"/>
+        <Folder Include="Extensions" />
+        <Folder Include="NamingPolicies" />
     </ItemGroup>
 
 </Project>

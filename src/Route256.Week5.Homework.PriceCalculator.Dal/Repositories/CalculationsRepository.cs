@@ -101,14 +101,13 @@ where id = any(@CalculationIds)
         return userIds.ToArray();
     }
 
-    public async Task<long> DeleteWithIds(
+    public async void DeleteWithIds(
         long[] calculationIds,
         CancellationToken token)
     {
         const string sqlQuery = @"
 delete from calculations
 where id = any(@CalculationIds)
-returning id
 ";
         var sqlQueryParams = new
         {
@@ -116,23 +115,20 @@ returning id
         };
 
         await using var connection = await GetAndOpenConnection();
-        var ids = await connection.QueryAsync<long>(
+        await connection.QueryAsync<long>(
             new CommandDefinition(
                 sqlQuery,
                 sqlQueryParams,
                 cancellationToken: token));
-
-        return ids.ToArray().Length;
     }
 
-    public async Task<long> DeleteAllWithUserId(
+    public async void DeleteAllWithUserId(
         long userId,
         CancellationToken token)
     {
         const string sqlQuery = @"
 delete from calculations
 where user_id = @UserId
-returning id
 ";
         var sqlQueryParams = new
         {
@@ -140,12 +136,10 @@ returning id
         };
 
         await using var connection = await GetAndOpenConnection();
-        var ids = await connection.QueryAsync<long>(
+        await connection.QueryAsync<long>(
             new CommandDefinition(
                 sqlQuery,
                 sqlQueryParams,
                 cancellationToken: token));
-
-        return ids.ToArray().Length;
     }
 }
