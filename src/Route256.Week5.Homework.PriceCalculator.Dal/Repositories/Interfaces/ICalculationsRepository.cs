@@ -13,15 +13,17 @@ public interface ICalculationRepository : IDbRepository
         CalculationHistoryQueryModel query,
         CancellationToken token);
 
-    Task<long[]> GetUserIds(
+    Task<bool> CheckCalculationsExistence(
         long[] calculationIds,
         CancellationToken token);
 
-    void DeleteWithIds(
-        long[] calculationIds,
-        CancellationToken token);
-
-    void DeleteAllWithUserId(
+    Task<long[]> CheckUserAccess(
         long userId,
+        long[] calculationIds,
+        CancellationToken token);
+
+    void DeleteWithIdsAndUserId(
+        long userId,
+        long[] calculationIds,
         CancellationToken token);
 }

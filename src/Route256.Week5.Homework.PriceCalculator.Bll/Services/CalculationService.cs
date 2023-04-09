@@ -96,25 +96,41 @@ public class CalculationService : ICalculationService
                 x.GoodIds))
             .ToArray();
     }
-
-    public async Task<long[]> GetUserIds(
+    
+    public async Task<bool> CheckCalculationsExistence(
         long[] calculationIds,
         CancellationToken token)
     {
-        return await _calculationRepository.GetUserIds(calculationIds, token);
+        return await _calculationRepository.CheckCalculationsExistence(calculationIds, token);
     }
 
-    public async void DeleteWithIds(
-        long[] calculationIds,
-        CancellationToken token)
-    {
-        _calculationRepository.DeleteWithIds(calculationIds, token);
-    }
-
-    public async void DeleteAllWithUserId(
+    public async Task<long[]> CheckUserAccess(
         long userId,
+        long[] calculationIds,
         CancellationToken token)
     {
-        _calculationRepository.DeleteAllWithUserId(userId, token);
+        return await _calculationRepository.CheckUserAccess(userId, calculationIds, token);
+    }
+
+    public async void DeleteWithIdsAndUserId(
+        long userId,
+        long[] calculationIds,
+        CancellationToken token)
+    {
+        _calculationRepository.DeleteWithIdsAndUserId(userId, calculationIds, token);
+    }
+
+    public async Task<long[]> GetGoodIds(
+        long[] calculationIds,
+        CancellationToken token)
+    {
+        return await _goodsRepository.GetGoodIds(calculationIds, token);
+    }
+
+    public async void CascadeDelete(
+        long[] goodIds,
+        CancellationToken token)
+    {
+        _goodsRepository.CascadeDelete(goodIds, token);
     }
 }

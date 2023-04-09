@@ -11,4 +11,12 @@ public interface IGoodsRepository : IDbRepository
     Task<GoodEntityV1[]> Query(
         long userId,
         CancellationToken token);
+
+    Task<long[]> GetGoodIds(
+        long[] calculationIds,
+        CancellationToken token);
+
+    void CascadeDelete(
+        long[] goodIds,
+        CancellationToken token);
 }

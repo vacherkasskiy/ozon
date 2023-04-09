@@ -77,66 +77,76 @@ select id
             .ToArray();
     }
 
-    public async Task<long[]> GetUserIds(
+    public async Task<bool> CheckCalculationsExistence(
         long[] calculationIds,
         CancellationToken token)
     {
         const string sqlQuery = @"
-select user_id from calculations
+select id from calculations
 where id = any(@CalculationIds)
 ";
         var sqlQueryParams = new
         {
-            CalculationIds = calculationIds
+            CalculationIds = calculationIds,
         };
 
         await using var connection = await GetAndOpenConnection();
-        var userIds = await connection.QueryAsync<long>(
+        var calculationIdsArray = await connection.QueryAsync<long>(
             new CommandDefinition(
                 sqlQuery,
                 sqlQueryParams,
                 cancellationToken: token));
 
-
-        return userIds.ToArray();
+        return calculationIdsArray.ToArray().Length == calculationIds.Length;
     }
-
-    public async void DeleteWithIds(
-        long[] calculationIds,
-        CancellationToken token)
-    {
-        const string sqlQuery = @"
-delete from calculations
-where id = any(@CalculationIds)
-";
-        var sqlQueryParams = new
-        {
-            CalculationIds = calculationIds
-        };
-
-        await using var connection = await GetAndOpenConnection();
-        await connection.QueryAsync<long>(
-            new CommandDefinition(
-                sqlQuery,
-                sqlQueryParams,
-                cancellationToken: token));
-    }
-
-    public async void DeleteAllWithUserId(
+    
+    public async Task<long[]> CheckUserAccess(
         long userId,
+        long[] calculationIds,
         CancellationToken token)
     {
         const string sqlQuery = @"
-delete from calculations
-where user_id = @UserId
+select id from calculations
+where id = any(@CalculationIds)
+and user_id != @UserId
 ";
         var sqlQueryParams = new
         {
+            CalculationIds = calculationIds,
             UserId = userId
         };
 
         await using var connection = await GetAndOpenConnection();
-        await connection.QueryAsync<long>(
+        var wrongCalculationIds = await connection.QueryAsync<long>(
+            new CommandDefinition(
+                sqlQuery,
+                sqlQueryParams,
+                cancellationToken: token));
+
+        return wrongCalculationIds.ToArray();
+    }
+
+    public async void DeleteWithIdsAndUserId(
+        long userId,
+        long[] calculationIds,
+        CancellationToken token)
+    {
+        string sqlQuery = @"
+delete from calculations
+where user_id = @UserId
+";
+        if (calculationIds.Length > 0)
+        {
+            sqlQuery += "\nand id = any(@CalculationIds)";
+        }
+        var sqlQueryParams = new
+        {
+            CalculationIds = calculationIds,
+            UserId = userId
+        };
+
+        await using var connection = await GetAndOpenConnection();
+        var result = await connection.QueryAsync<string>(
             new CommandDefinition(
                 sqlQuery,
                 sqlQueryParams,

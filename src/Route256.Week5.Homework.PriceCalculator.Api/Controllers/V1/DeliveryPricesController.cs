@@ -81,21 +81,21 @@ public class DeliveryPricesController : ControllerBase
         ClearHistoryRequest request,
         CancellationToken ct)
     {
-        var query = new ClearHistoryQuery(
+        var query = new ClearHistoryCommand(
             request.UserId,
             request.CalculationIds);
         try
         {
             await _mediator.Send(query, ct);
-            return StatusCode(200);
+            return StatusCode(StatusCodes.Status200OK);
         }
         catch (OneOrManyCalculationsNotFoundException ex)
         {
-            return StatusCode(400);
+            return StatusCode(StatusCodes.Status400BadRequest);
         }
         catch (OneOrManyCalculationsBelongsToAnotherUserException ex)
         {
-            return StatusCode(403);
+            return StatusCode(StatusCodes.Status403Forbidden, new { wrong_calculation_ids = ex.CalculationIds });
         }
     }
 }

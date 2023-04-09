@@ -70,4 +70,51 @@ select id
         return goods
             .ToArray();
     }
+
+    public async Task<long[]> GetGoodIds(
+        long[] calculationIds,
+        CancellationToken token)
+    {
+        const string sqlQuery = @"
+select unnest(good_ids)
+from calculations
+where id = any(@CalculationIds)
+";
+
+        var sqlQueryParams = new
+        {
+            CalculationIds = calculationIds
+        };
+        
+        await using var connection = await GetAndOpenConnection();
+        var goodIds = await connection.QueryAsync<long>(
+            new CommandDefinition(
+                sqlQuery,
+                sqlQueryParams,
+                cancellationToken: token));
+
+        return goodIds.ToArray();
+    }
+
+    public async void CascadeDelete(
+        long[] goodIds,
+        CancellationToken token)
+    {
+        const string sqlQuery = @"
+delete from goods
+where id = any(@GoodIds)
+";
+
+        var sqlQueryParams = new
+        {
+            GoodIds = goodIds
+        };
+        
+        await using var connection = await GetAndOpenConnection();
+        await connection.QueryAsync<long>(
+            new CommandDefinition(
+                sqlQuery,
+                sqlQueryParams,
+                cancellationToken: token));
+    }
 }
