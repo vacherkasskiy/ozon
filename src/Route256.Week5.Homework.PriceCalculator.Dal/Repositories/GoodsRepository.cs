@@ -85,7 +85,7 @@ where id = any(@CalculationIds)
         {
             CalculationIds = calculationIds
         };
-        
+
         await using var connection = await GetAndOpenConnection();
         var goodIds = await connection.QueryAsync<long>(
             new CommandDefinition(
@@ -109,7 +109,7 @@ where id = any(@GoodIds)
         {
             GoodIds = goodIds
         };
-        
+
         await using var connection = await GetAndOpenConnection();
         await connection.QueryAsync<long>(
             new CommandDefinition(

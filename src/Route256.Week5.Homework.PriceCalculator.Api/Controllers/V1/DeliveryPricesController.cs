@@ -95,7 +95,7 @@ public class DeliveryPricesController : ControllerBase
         }
         catch (OneOrManyCalculationsBelongsToAnotherUserException ex)
         {
-            return StatusCode(StatusCodes.Status403Forbidden, new { wrong_calculation_ids = ex.CalculationIds });
+            return StatusCode(StatusCodes.Status403Forbidden, new {wrong_calculation_ids = ex.CalculationIds});
         }
     }
 }

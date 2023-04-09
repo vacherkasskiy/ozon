@@ -28,7 +28,7 @@ public interface ICalculationService
         long userId,
         long[] calculationIds,
         CancellationToken token);
-    
+
     void DeleteWithIdsAndUserId(
         long userId,
         long[] calculationIds,

@@ -87,7 +87,7 @@ where id = any(@CalculationIds)
 ";
         var sqlQueryParams = new
         {
-            CalculationIds = calculationIds,
+            CalculationIds = calculationIds
         };
 
         await using var connection = await GetAndOpenConnection();
@@ -99,7 +99,7 @@ where id = any(@CalculationIds)
 
         return calculationIdsArray.ToArray().Length == calculationIds.Length;
     }
-    
+
     public async Task<long[]> CheckUserAccess(
         long userId,
         long[] calculationIds,
@@ -131,14 +131,11 @@ and user_id != @UserId
         long[] calculationIds,
         CancellationToken token)
     {
-        string sqlQuery = @"
+        var sqlQuery = @"
 delete from calculations
 where user_id = @UserId
 ";
-        if (calculationIds.Length > 0)
-        {
-            sqlQuery += "\nand id = any(@CalculationIds)";
-        }
+        if (calculationIds.Length > 0) sqlQuery += "\nand id = any(@CalculationIds)";
         var sqlQueryParams = new
         {
             CalculationIds = calculationIds,

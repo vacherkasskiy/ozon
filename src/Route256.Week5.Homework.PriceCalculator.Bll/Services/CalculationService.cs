@@ -96,7 +96,7 @@ public class CalculationService : ICalculationService
                 x.GoodIds))
             .ToArray();
     }
-    
+
     public async Task<bool> CheckCalculationsExistence(
         long[] calculationIds,
         CancellationToken token)

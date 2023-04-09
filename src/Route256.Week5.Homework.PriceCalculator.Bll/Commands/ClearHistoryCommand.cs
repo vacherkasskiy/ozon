@@ -27,20 +27,16 @@ public class ClearHistoryCommandHandler
         if (!await _calculationService.CheckCalculationsExistence(
                 request.CalculationIds,
                 cancellationToken))
-        {
             throw new OneOrManyCalculationsNotFoundException();
-        }
 
         var wrongCalculationIds = await _calculationService.CheckUserAccess(
             request.UserId,
             request.CalculationIds,
             cancellationToken);
-        
+
         if (request.CalculationIds.Length > 0
             && wrongCalculationIds.Length > 0)
-        {
             throw new OneOrManyCalculationsBelongsToAnotherUserException(wrongCalculationIds);
-        }
 
         var goodIds = await _calculationService.GetGoodIds(
             request.CalculationIds,
@@ -52,7 +48,7 @@ public class ClearHistoryCommandHandler
             request.UserId,
             request.CalculationIds,
             cancellationToken);
-        
+
         return Unit.Value;
     }
 }
