@@ -169,4 +169,117 @@ public class CalculationsRepositoryTests
         // Assert
         foundCalculations.Should().BeEmpty();
     }
+
+    [Fact]
+    public async Task CheckUserAccess_Returns_ReturnsEmpty_WhenForProperCalculations()
+    {
+        // Arrange
+        var userId = Create.RandomId();
+        var now = DateTimeOffset.UtcNow;
+        
+        var calculations = CalculationEntityV1Faker.Generate(5)
+            .Select(x => x.WithUserId(userId)
+                .WithAt(now))
+            .ToArray();
+        
+        var calculationIds = (await _calculationRepository.Add(calculations, default))
+            .ToArray();
+        
+        // Act
+        var wrongCalculationIds = (await _calculationRepository.CheckUserAccess(
+            userId,
+            calculationIds,
+            default));
+        
+        // Assert
+        wrongCalculationIds.Should().BeEmpty();
+    }
+
+    [Fact]
+    public async Task CheckUserAccess_ReturnsWrongIds_WhenForWrongCalculations()
+    {
+        // Arrange
+        var userId = Create.RandomId();
+        var anotherUserId = Create.RandomId();
+        var now = DateTimeOffset.UtcNow;
+        
+        var calculations = CalculationEntityV1Faker.Generate(5)
+            .Select(x => x.WithUserId(userId)
+                .WithAt(now))
+            .ToArray();
+        
+        var calculationIds = (await _calculationRepository.Add(calculations, default))
+            .ToArray();
+        
+        // Act
+        var wrongCalculationIds = (await _calculationRepository.CheckUserAccess(
+            anotherUserId,
+            calculationIds,
+            default));
+        
+        // Assert
+        wrongCalculationIds.Should().BeEquivalentTo(calculationIds);
+    }
+
+    [Fact]
+    public async Task DeleteWithIdsAndUserId_DeletesCalculations()
+    {
+        // Arrange
+        var userId = Create.RandomId();
+        var now = DateTimeOffset.UtcNow;
+
+        var calculations = CalculationEntityV1Faker.Generate(5)
+            .Select(x => x.WithUserId(userId)
+                .WithAt(now))
+            .ToArray();
+
+        var calculationIds = (await _calculationRepository.Add(calculations, default))
+            .ToArray();
+
+        // Act
+        _calculationRepository.DeleteWithIdsAndUserId(
+            userId,
+            calculationIds,
+            default);
+        
+        var foundCalculations = await _calculationRepository.Query(
+            new CalculationHistoryQueryModel(userId, 100, 0),
+            default);
+
+        // Assert
+        foundCalculations.Should().BeEmpty();
+    }
+
+    [Fact]
+    public async Task DeleteWithIdsAndUserId_DeletesNothing_WhenWrongUser()
+    {
+        // Arrange
+        var userId = Create.RandomId();
+        var anotherUserId = Create.RandomId();
+        var now = DateTimeOffset.UtcNow;
+        var count = 5;
+
+        var calculations = CalculationEntityV1Faker.Generate(count)
+            .Select(x => x.WithUserId(userId)
+                .WithAt(now))
+            .ToArray();
+
+        var calculationIds = (await _calculationRepository.Add(calculations, default))
+            .ToArray();
+
+        // Act
+        _calculationRepository.DeleteWithIdsAndUserId(
+            anotherUserId,
+            calculationIds,
+            default);
+        
+        var foundCalculations = await _calculationRepository.Query(
+            new CalculationHistoryQueryModel(userId, count, 0),
+            default);
+
+        // Assert
+        foundCalculations.Should().NotBeEmpty();
+        foundCalculations.Length.Should().BeGreaterOrEqualTo(count);
+        foundCalculations.Length.Should().BeLessOrEqualTo(count);
+    }
 }
