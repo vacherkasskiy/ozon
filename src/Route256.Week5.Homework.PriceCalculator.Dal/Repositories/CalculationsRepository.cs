@@ -135,7 +135,7 @@ and user_id != @UserId
 delete from calculations
 where user_id = @UserId
 ";
-        if (calculationIds.Length > 0) sqlQuery += "\nand id = any(@CalculationIds)";
+        if (calculationIds.Length > 0) sqlQuery += "\n and id = any(@CalculationIds)";
         var sqlQueryParams = new
         {
             CalculationIds = calculationIds,
@@ -143,7 +143,7 @@ where user_id = @UserId
         };
 
         await using var connection = await GetAndOpenConnection();
-        var result = await connection.QueryAsync<string>(
+        await connection.QueryAsync(
             new CommandDefinition(
                 sqlQuery,
                 sqlQueryParams,

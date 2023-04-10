@@ -93,7 +93,8 @@ where id = any(@CalculationIds)
                 sqlQueryParams,
                 cancellationToken: token));
 
-        return goodIds.ToArray();
+        return goodIds
+            .ToArray();
     }
 
     public async void CascadeDelete(
